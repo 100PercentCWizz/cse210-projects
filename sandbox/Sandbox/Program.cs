@@ -1,87 +1,132 @@
 using System;
 using System.Reflection.Metadata;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
+using System.Xml.Schema;
 
 class Program
 {
-    static string multiple_choice (List<List<string>> kdr_list, string header, Boolean clear_screen) {
-// def multiple_choice(choices, header = 'EMPTY', prompt = 'Please select an action and press ENTER: ', clear_screen = True):
-//     # A string in the choices list can be substituted for a list in the format ['key', 'display', 'return']
-//     # In this case, the option will display like so:
-//     #   1. Option 1
-//     #   2. Option 2
-//     # key. display (returns return)
-//     #   3. Option 3
+    static string multiple_choice (List<List<string>> kdr_list, string header = "EMPTY", Boolean clear_screen = true) {
+// // def multiple_choice(choices, header = 'EMPTY', prompt = 'Please select an action and press ENTER: ', clear_screen = True):
+// //     # A string in the choices list can be substituted for a list in the format ['key', 'display', 'return']
+// //     # In this case, the option will display like so:
+// //     #   1. Option 1
+// //     #   2. Option 2
+// //     # key. display (returns return)
+// //     #   3. Option 3
 
-//     def red(text):
-//         text = '\033[91m' + text + '\033[0m'
-//         return text
+// //     def red(text):
+// //         text = '\033[91m' + text + '\033[0m'
+// //         return text
 
-//     def cls():
-//         print("\033c\033[3J", end='')
+// //     def cls():
+// //         print("\033c\033[3J", end='')
 
-//     def create_key_choice_return_list(choices):
-//         valid_ins = []
-//         out_key_choice_return_list = []
-//         unique_numeric = 1
-//         for object in choices:
-//             if isinstance(object, list):
-//                 if object[0] == '':
-//                     object[0] = unique_numeric
-//                 out_key_choice_return_list.append([str(object[0]), str(object[1]), str(object[2])])
-//                 unique_numeric += 1
-//             else:
-//                 out_key_choice_return_list.append([str(unique_numeric), str(object), str(object)])
-//                 unique_numeric += 1
-//             valid_ins.append(out_key_choice_return_list[len(out_key_choice_return_list) - 1][0])
-//         return out_key_choice_return_list, valid_ins
+        Boolean str_in_list(string search_str, List<string> in_list) {
+            Boolean out_bool = false;
+            foreach (string item in in_list) {
+                if (item == search_str) {
+                    out_bool = true;
+                }
+            }
+            return out_bool;
+        }
 
-//     def longest_length_in_list_of_lists(list_of_lists, index):
-//         longest = len(list_of_lists[0][0])
-//         for item in list_of_lists:
-//             if len(item[index]) > longest:
-//                 longest = len(item[index])
-//         return longest
+        List<List<string>> clean_up_kdr_list(List<List<string>> in_kdr) {
+            List<List<string>> out_kdr = new List<List<string>>(in_kdr);
+            int numeric = 1;
+            for (int index = 0; index < in_kdr.Count; index ++) {
+                // if the return is left empty, the return will default to the display
+                if (out_kdr[index][2] == "") {
+                    out_kdr[index][2] = out_kdr[index][1];
+                }
+                // if the key is left empty, the key will be assigned a unique number
+                if (out_kdr[index][0] == "") {
+                    out_kdr[index][0] = $"{numeric}";
+                    numeric ++;
+                }
+            }
+            return out_kdr;
+        }
 
-//     def print_and_prompt(internal_header, prompt2, cs = clear_screen, error = ''):
-//         if cs == True:
-//             cls()
-//         print(f'\n{internal_header}\n')
-//         longest_key_length = longest_length_in_list_of_lists(key_choice_return_list, 0)
-//         for item in key_choice_return_list:
-//             padding = ' '
-//             repetitions = longest_key_length - len(item[0])
-//             for number in range(0, repetitions):
-//                 padding = padding + ' '
-//             print(f'{padding}{item[0]}. {item[1]}')
-//         print(error, end = '')
-//         user_input = input(f'\n{prompt2}')
-//         return user_input
+        List<string> get_valids(List<List<string>> in_kdr) {
+            List<string> valids = [];
+            foreach (List<string> item in in_kdr) {
+                valids.Add(item[0]);
+            }
+            return valids;
+        }
 
-//     key_choice_return_list, valid_answers = create_key_choice_return_list(choices)
+        int get_longest_key_len(List<List<string>> in_list) {
+            int longest = 0;
+            foreach (List<string> item in in_list) {
+                if (item[0].Length > longest) {
+                    longest = item[0].Length;
+                }
+            }
+            return longest;
+        }
 
-        string user_input = "HELLO";
-//     user_input = print_and_prompt(header, prompt, error = '')
+        string print_and_prompt(List<List<string>> in_list, string error = "") {
+            if (clear_screen == true) {
+                Console.WriteLine("---  CLEAR  HERE  ---");
+            }
+            Console.WriteLine($"\n{header}\n");
+            int longest_key_len = get_longest_key_len(in_list);
+            foreach (List<string> item in in_list) {
+                int padding_amount = longest_key_len - item[0].Length;
+                string padding = " ";
+                for (int i = 0; i < padding_amount; i ++) {
+                    padding = padding + " ";
+                }
+                Console.WriteLine($" {padding}{item[0]}. {item[1]}");
+            }
+            Console.Write(error);
+            Console.Write("\nPlease key in an option and press ENTER: ");
+            string user = Console.ReadLine();
+            return user;
+        }
+
+        string user_input;
+
+        List<List<string>> cleaned_kdr_list = clean_up_kdr_list(kdr_list);
+        List<string> valid_answers = get_valids(cleaned_kdr_list);
+
+        user_input = print_and_prompt(cleaned_kdr_list);
     
-//     while user_input not in valid_answers:
-//         user_input = print_and_prompt(header, prompt, error = red(f'\n"{user_input}" is an invalid response.'))
+        while (!str_in_list(user_input, valid_answers)) {
+            user_input = print_and_prompt(cleaned_kdr_list, error: $"\n\"{user_input}\" is an invalid response.");
+        }
     
-//     for item in key_choice_return_list:
-//         if user_input == item[0]:
-//             user_input = item[2]
-//             break
+        foreach (List<string> item in cleaned_kdr_list) {
+            if (user_input == item[0]) {
+                user_input = item[2];
+                break;
+            }
+        }
     
-//     return user_input
         return user_input;
     }
     
     static void Main(string[] args)
     {
-        Console.Clear();
-        Console.WriteLine("Hello Sandbox World!");
 
-        for (int x = 0; x < 10; x++) {
-            Console.WriteLine($"x = {x}");
-        }
+        Course course1 = new Course();
+        course1._className = "Programming with Classes";
+        course1._color = "Green";
+        course1._courseCode = "CSE 210";
+        course1._numberOfCredits = 2;
+        course1.Display();
 
+        // string user = "HOME";
+
+        // while (user != "END PROGRAM") {
+        //     if (user == "HOME") {
+        //         List<List<string>> kdr = [["", "a", ""], ["", "b", ""], ["", "c", ""]];
+        //         user = multiple_choice(kdr_list: kdr, header: "HOME");
+        //     }
+        // }
+        // Console.WriteLine(user);
+        
     }
 }

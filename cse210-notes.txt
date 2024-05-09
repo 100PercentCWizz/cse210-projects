@@ -1,0 +1,12 @@
+
+name
+
+attributes
+(member variables)
+the convention for variable naming for member variables is _variableName
+
+behaviors
+(member methods or functions)
+
+ABSTRACTION
+
