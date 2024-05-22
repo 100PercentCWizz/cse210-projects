@@ -143,7 +143,7 @@ class CHUser {
 
             string[] folders = Directory.GetDirectories(path);
             for (int index = 0; index < folders.Count(); index ++) {
-                folders[index] = Regex.Replace(folders[index], ".*/", "");
+                folders[index] = Regex.Replace(folders[index], ".*(/|\\\\)", "");
                 outFolders.Add($"{folders[index]}/");
             }
             return outFolders;
@@ -180,22 +180,38 @@ class CHUser {
             
             dirStr = ConcatList(selectedDirs);
 
+            availableDirs = GetDirList(dirStr);
+            availableFiles = GetFileList(dirStr);
+
             // If the path is a file, the only options will be BACK, USE, and CANCEL
             if (IsFile(dirStr)) {
                 options = [["1", "Go Back a Folder", "BACK"], ["2", "Use This File", "USE"], ["3", "Cancel", "CANCEL"]];
             }
+            // If the path is a folder and there are FILES but no FOLDERS
             else if (availableFiles.Count() > 0 && availableDirs.Count() < 1) {
-                options = [["1", "Go Back a Folder\n", "BACK"], ["3", "Cancel\nSELECT A FILE:\nENTER A FOLDER: \u001b[91mNONE AVAILABLE\u001b[0m", "CANCEL"]];
-                for (int index = 0; index < availableFiles.Count; index ++) {
+                options = [["1", "Go Back a Folder\n", "BACK"], ["3", "Cancel\nSELECT A FILE:"]];
+                for (int index = 0; index < availableFiles.Count - 1; index ++) {
                     options.Add([availableFiles[index]]);
                 }
+                options.Add([$"{availableFiles[availableFiles.Count - 1]}\nENTER A FOLDER: \u001b[91mNONE AVAILABLE\u001b[0m", availableFiles[availableFiles.Count - 1]]);
             }
             else if (availableFiles.Count() < 1 && availableDirs.Count() > 0) {
                 options = [["1", "Go Back a Folder\n", "BACK"], ["3", "Cancel\nSELECT A FILE: \u001b[91mNONE AVAILABLE\u001b[0m\nENTER A FOLDER:", "CANCEL"]];
+                for (int index = 0; index < availableDirs.Count; index ++) {
+                    options.Add([availableDirs[index]]);
+                }
             }
             else if (availableFiles.Count() > 0 && availableDirs.Count() > 0) {
+                options = [["1", "Go Back a Folder\n", "BACK"], ["3", "Cancel\nSELECT A FILE:"]];
+                for (int index = 0; index < availableFiles.Count - 1; index ++) {
+                    options.Add([availableFiles[index]]);
+                }
+                options.Add([$"{availableFiles[availableFiles.Count - 1]}\nENTER A FOLDER:", availableFiles[availableFiles.Count - 1]]);
+                for (int index = 0; index < availableDirs.Count; index ++) {
+                    options.Add([availableDirs[index]]);
+                }
             }
-            else {
+            else if (availableFiles.Count() < 1 && availableDirs.Count() < 1) {
                 options = [["1", "Go Back a Folder\n", "BACK"], ["3", "Cancel\nSELECT A FILE: \u001b[91mNONE AVAILABLE\u001b[0m\nENTER A FOLDER: \u001b[91mNONE AVAILABLE\u001b[0m", "CANCEL"]];
             }
             // END

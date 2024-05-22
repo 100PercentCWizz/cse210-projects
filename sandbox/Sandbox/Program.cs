@@ -34,12 +34,12 @@ class Program
         // course1.Display();
 
         // --------------------------------------
-
-
         string pathy = @"C:\Users\User\Documents\[1] Christian\[3] Programming\[3] C#\cse210-projects\sandbox\Sandbox";
         CHUser chuser = new CHUser();
         string user = chuser.GetFileExplore(baseDir: pathy);
         Console.WriteLine(user);
+        // --------------------------------------
+
         // string thisDir = @"C:\Users\User\Documents\[1] Christian\[3] Programming\[3] C#\[1] My Programs";
         // thisDir.Replace("\\", "/");
 
