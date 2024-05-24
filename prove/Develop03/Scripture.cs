@@ -7,22 +7,6 @@ class Scripture {
     private List<Word> _words = new List<Word>();
     private Reference _ref = new Reference();
     
-    // constructor
-    // public Scripture(string textParam, Boolean isVisibleParam) {
-    //     _text = textParam;
-    //     _isVisible = isVisibleParam;
-    // }
-
-    // member methods
-
-        // accessors
-    // public string GetText() { return _text; }
-    // public Boolean GetIsVisible() { return _isVisible; }
-
-        // mutators
-    // public void SetText(string textParam) { _text = textParam; }
-    // public void SetIsVisible(Boolean isVisibleParam) { _isVisible = isVisibleParam; }
-
     // others
     public void RenderAndDisplayScripture() {
         Console.Write($"{_ref.GetBook()} {_ref.GetChapter()}:{_ref.GetVerse()} - ");
@@ -41,29 +25,29 @@ class Scripture {
         }
     }
 
-    public void ResetVisibles() {
+    public void ResetWordsToVisible() {
         foreach (Word word in _words) {
             word.SetIsVisible(true);
         }
     }
 
     private Boolean ThereIsStillVisibleWords() {
+        Boolean outBool = false;
         foreach (Word word in _words) {
-            if (word.GetIsVisible()) {
-                return true;
+            if (word.GetIsVisible() == true) {
+                outBool = true;
             }
         }
-        return false;
+        return outBool;
     }
 
-    public void AddInvisibles(int invisiblesToAdd) {
+    public void RemoveWords(int invisiblesToAdd) {
 
         Random r = new Random();
 
         for (int i = 0; i < invisiblesToAdd && ThereIsStillVisibleWords(); i ++) {
             int randNum = r.Next(0, _words.Count);
-            Boolean wordAtIndexIsNotVisible = !_words[randNum].GetIsVisible();
-            while (wordAtIndexIsNotVisible) {
+            while (_words[randNum].GetIsVisible() == false) {
                 randNum = r.Next(0, _words.Count);
             }
             _words[randNum].SetIsVisible(false);

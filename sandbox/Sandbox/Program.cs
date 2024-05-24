@@ -36,7 +36,7 @@ class Program
         // --------------------------------------
         string pathy = @"C:\Users\User\Documents\[1] Christian\[3] Programming\[3] C#\cse210-projects\sandbox\Sandbox";
         CHUser chuser = new CHUser();
-        string user = chuser.GetFileExplore(baseDir: pathy);
+        string user = chuser.GetFileExplore(baseDir: pathy, header2: "HOME > GET FILE");
         Console.WriteLine(user);
         // --------------------------------------
 

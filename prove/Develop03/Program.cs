@@ -15,7 +15,7 @@ class Program
             scripture.AddWord(newWord);
         }
         
-        scripture.ResetVisibles();
+        scripture.ResetWordsToVisible();
         string user = "";
         
         while (user != "quit") {
@@ -26,10 +26,10 @@ class Program
             user = user.ToLower();
             
             if (user == "re") {
-                scripture.ResetVisibles();
+                scripture.ResetWordsToVisible();
             }
             else {
-                scripture.AddInvisibles(3);
+                scripture.RemoveWords(3);
             }
         }
         Console.WriteLine("PROGRAM ENDED.");

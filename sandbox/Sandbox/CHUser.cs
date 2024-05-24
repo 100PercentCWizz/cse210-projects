@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 class CHUser {
 
-    public string MultipleChoice (List<List<string>> kdr_list, string header = "EMPTY", string clear_separator = "\x1b[2J\x1b[H", int startingIndex = 1) {
+    public string MultipleChoice(List<List<string>> kdr_list, string header = "EMPTY", string clearSeparator = "\x1b[2J\x1b[H", int startingIndex = 1) {
     // def multiple_choice(choices, header = 'EMPTY', prompt = 'Please select an action and press ENTER: ', clear_screen = True):
     //     # A string in the choices list can be substituted for a list in the format ['key', 'display', 'return']
     //     # In this case, the option will display like so:
@@ -85,7 +85,7 @@ class CHUser {
             //     // Console.WriteLine("---  CLEAR  HERE  ---");
             //     cls();
             // }
-            Console.Write(clear_separator);
+            Console.Write(clearSeparator);
             Console.WriteLine($"\n{header}\n");
             int longest_key_len = get_longest_key_len(in_list);
             foreach (List<string> item in in_list) {
@@ -127,9 +127,9 @@ class CHUser {
 
         List<string> GetFileList(string path) {
             List<string> outFiles = new List<string>();
-            path.Replace("\\", "/");
+            string internalPath = path.Replace("\\", "/");
 
-            string[] files = Directory.GetFiles(path);
+            string[] files = Directory.GetFiles(internalPath);
             for (int index = 0; index < files.Count(); index ++) {
                 files[index] = Regex.Replace(files[index], ".*\\\\", "");
                 outFiles.Add(files[index]);
@@ -139,9 +139,9 @@ class CHUser {
 
         List<string> GetDirList(string path) {
             List<string> outFolders = new List<string>();
-            path.Replace("\\", "/");
+            string internalPath = path.Replace("\\", "/");
 
-            string[] folders = Directory.GetDirectories(path);
+            string[] folders = Directory.GetDirectories(internalPath);
             for (int index = 0; index < folders.Count(); index ++) {
                 folders[index] = Regex.Replace(folders[index], ".*(/|\\\\)", "");
                 outFolders.Add($"{folders[index]}/");
@@ -216,7 +216,7 @@ class CHUser {
             }
             // END
 
-            user = MultipleChoice(kdr_list: options, header: $"{header2}\nCURRENT PATH: {ConcatList(selectedDirs)}\n\nOTHER ACTIONS:", clear_separator: clearSeparator2, startingIndex: 4);
+            user = MultipleChoice(kdr_list: options, header: $"{header2}\n\nCURRENT PATH: {ConcatList(selectedDirs)}\n\nOTHER ACTIONS:", clearSeparator: clearSeparator2, startingIndex: 4);
             if (user == "CANCEL") {
                 return user;
             }
@@ -233,7 +233,7 @@ class CHUser {
 
         return user;
         
-// CURRENT PATH: C:/sjk/fgh/sdf/fgh/
+// \nCURRENT PATH: C:/sjk/fgh/sdf/fgh/
 //
 // OTHER ACTIONS:
 // 1. Go Back a Folder
@@ -257,13 +257,15 @@ class CHUser {
 // 3. Cancel
     }
 
-    public string GetDirExplore(string baseDir2, string header3 = "EMPTY", string clearSeparator3 = "\x1b[2J\x1b[H") {
-        string path = @"C:\Users\JohnDoe\Documents";
-        string[] files = Directory.GetFiles(path);
+    // public string GetDirExplore(string baseDir2, string header3 = "EMPTY", string clearSeparator3 = "\x1b[2J\x1b[H") {
+    //     string path = @"C:\Users\JohnDoe\Documents";
+    //     string[] files = Directory.GetFiles(path);
    
-        foreach (string file in files) {
-            Console.WriteLine(file);
-        }
-        return "FILLER";
-    }
+    //     foreach (string file in files) {
+    //         Console.WriteLine(file);
+    //     }
+
+    //     return "FILLER";
+    // }
+
 }
