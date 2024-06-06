@@ -8,6 +8,7 @@ class Program
         Reference refer = new Reference("3 Nephi", "5", "13");
         scripture.SetReference(refer);
 
+        // string verseText = "Children learn in an integrated fashion that cuts across academic disciplines or subject areas. Because the foundations of subject area knowledge are established in early childhood, educators need subject-area knowledge, an understanding of the learning progressions within each subject area, and pedagogical knowledge about teaching each subject area’s content effectively.";
         string verseText = "Behold, I am a disciple of Jesus Christ, the Son of God. I have been called of him to declare his word among his people, that they might have everlasting life.";
         string[] wordList = verseText.Split(" ");
         foreach (string word in wordList) {

@@ -17,7 +17,6 @@ class Word {
     public Boolean GetIsVisible() { return _isVisible; }
 
         // mutators
-    public void SetText(string textParam) { _text = textParam; }
     public void SetIsVisible(Boolean isVisibleParam) { _isVisible = isVisibleParam; }
 
 }
