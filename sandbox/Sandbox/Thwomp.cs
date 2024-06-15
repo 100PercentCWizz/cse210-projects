@@ -31,13 +31,45 @@ class Thwomp {
         return stringParam;
     }
 
-
 // Thread.Sleep(1000);
 // Console.WriteLine("c\b");
-    public void PrintThwomp() {
-        foreach (string line in _thwompText) {
-            Console.WriteLine(Color(line, "##"));
+    public string GetThwompString(int padding, int pitchParam) {
+        string outString = "";
+        for (int i = 0; i < padding; i ++) {
+            outString = outString + "                                      \n";
         }
+        foreach (string line in _thwompText) {
+            outString = outString + Color(line, "##") + "\n";
+        }
+        for (int i = padding; i < pitchParam; i ++) {
+            outString = outString + "                                      \n";
+        }
+        return outString;
     }
+
+// PASTE THIS INTO THE PROGRAM FILE
+        // Thwomp thwomp = new Thwomp();
+        // // thwomp.PrintThwomp();
+
+        // // -------------------------------------
+
+        // double rise = 10;
+        // double frequency = 0.5;
+
+        // double pitch = rise / 2;
+        // int x = 0;
+
+        // int y = 0;
+
+        // Console.WriteLine("\x1b[2J\x1b[H");
+
+        // while (true) {
+        //     y = (int)((-1 * pitch * Math.Cos(frequency * x) + pitch) / 1);
+        //     Console.WriteLine(thwomp.GetThwompString(y, (int)pitch));
+        //     Console.CursorLeft = 0;
+        //     Console.CursorTop = 0;
+        //     x ++;
+        //     Thread.Sleep(200);
+        // }
 
 }
