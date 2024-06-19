@@ -10,3 +10,11 @@ behaviors
 
 ABSTRACTION
 
+
+
+So which should you use, an Abstract class or an Interface?
+The answer depends on whether your base class will have any
+member variables or method bodies. If you want to provide those,
+then you should create an abstract class. If your base class
+is only there to define the methods that should be overridden, then
+you should use an Interface.
