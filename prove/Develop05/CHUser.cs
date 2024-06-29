@@ -254,6 +254,7 @@ class CHUser {
     }
 
     // GET FILE/DIRECTORY FUNCTIONS
+
     private List<string> GetFileListFromLocation(string path, List<string> fileTypes) {
 
         List<string> outFiles = new List<string>();

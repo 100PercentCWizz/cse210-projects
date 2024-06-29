@@ -1,0 +1,5 @@
+GOAL TYPE | DESCRIPTION           | POINTS | TIMES COMPLETED | MAX COMPLETION | BONUS POINTS
+simple    | Run 5k                | 100    | 1               |                |             
+eternal   | Read scriptures daily | 10     | 2               |                |             
+checklist | Go to temple 10 times | 50     | 3               | 10             | 100         
+eternal   | Eat daily             | 1      | 0               |                |             
