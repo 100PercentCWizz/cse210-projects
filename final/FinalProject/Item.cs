@@ -1,15 +1,12 @@
-class ClassTemplate {
+class Item {
 
     // MEMBER VARIABLES / ATTRIBUTES
-
-    private int var;
 
     // MEMBER METHODS / FUNCTIONS / BEHAVIORS
 
         // CONSTRUCTORS ( METHODS )
 
-    public ClassTemplate() {
-
+    public Item() {
     }
 
         // GETTERS / ACCESSORS ( METHODS )

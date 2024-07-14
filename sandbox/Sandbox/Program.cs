@@ -26,29 +26,38 @@ class Program
 
         // }
 
-        Thwomp thwomp = new Thwomp();
-        // thwomp.PrintThwomp();
+        // Thwomp thwomp = new Thwomp();
+        // // thwomp.PrintThwomp();
 
-        // -------------------------------------
+        // // -------------------------------------
 
-        double rise = 10;
-        double frequency = 0.5;
+        // double rise = 10;
+        // double frequency = 0.5;
 
-        double pitch = rise / 2;
-        int x = 0;
+        // double pitch = rise / 2;
+        // int x = 0;
 
-        int y = 0;
+        // int y = 0;
 
-        Console.WriteLine("\x1b[2J\x1b[H");
+        // Console.WriteLine("\x1b[2J\x1b[H");
 
-        while (true) {
-            y = (int)((-1 * pitch * Math.Cos(frequency * x) + pitch) / 1);
-            Console.WriteLine(thwomp.GetThwompString(y, (int)pitch));
-            Console.CursorLeft = 0;
-            Console.CursorTop = 0;
-            x ++;
-            Thread.Sleep(200);
-        }
+        // while (true) {
+        //     y = (int)((-1 * pitch * Math.Cos(frequency * x) + pitch) / 1);
+        //     Console.WriteLine(thwomp.GetThwompString(y, (int)pitch));
+        //     Console.CursorLeft = 0;
+        //     Console.CursorTop = 0;
+        //     x ++;
+        //     Thread.Sleep(200);
+        // }
+
+        CHString chstring = new CHString();
+        Console.Clear();
+        List<List<string>> d = [
+            ["ID", "DATE", "DESCRIPTION"],
+            ["1", "26 FEB 2001", "Nikara's birthday"],
+            ["2", "16 NOV 1999", "Christian's birthday"]
+        ];
+        chstring.DisplayDB(d);
 
     }
 
