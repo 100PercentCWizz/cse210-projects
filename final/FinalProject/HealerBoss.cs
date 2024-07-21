@@ -1,23 +1,24 @@
-class HeavyBoss : Boss {
+class HealerBoss : Boss {
 
     // MEMBER VARIABLES / ATTRIBUTES
 
-    private int _weight;
+    private int _rank;
 
     // MEMBER METHODS / FUNCTIONS / BEHAVIORS
 
         // CONSTRUCTORS ( METHODS )
 
-    public HeavyBoss(int score) : base(score) {
+    public HealerBoss(int score) : base(score) {
         // From Enemy
-        _name = "CHONK";
+        _name = "MED-PUNK";
         _maxHp = 200 + (score * 10);
         _hp = _maxHp;
         // From Boss
         // _droppableItems = [new Item()];
         // From Self
         Random rand = new Random();
-        _weight = rand.Next(300 + (score * 10), 300 + ((score + 1) * 10));
+        _rank = rand.Next(1, 3);
+        _internalScore = score;
     }
 
         // GETTERS / ACCESSORS ( METHODS )
@@ -28,10 +29,17 @@ class HeavyBoss : Boss {
 
     public override int Attack() {
         Random rand = new Random();
-        int damage = rand.Next(_weight - 50, _weight + 50);
+
+        int startFactor = rand.Next(_internalScore * 2 * 10, _internalScore * 4 * 10);
+        int damage = (_rank / 4) * startFactor;
+        _hp += ((4 - _rank) / 4) * startFactor;
+        if (_hp > _maxHp) {
+            _hp = _maxHp;
+        }
+
         return damage;
     }
 
-    public override string GetName() { return $"{_weight} POUND {_name}"; }
+    public override string GetName() { return $"RANK {_rank} {_name}"; }
 
 }

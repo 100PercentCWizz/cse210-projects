@@ -28,6 +28,11 @@ class CHString {
         return $"{TextRepeated(" ", lPad)}{text}{TextRepeated(" ", rPad)}";
     }
 
+    public string LeftAligned(string text, int totalLength) {
+        int rPad = (totalLength - text.Count());
+        return $"{text}{TextRepeated(" ", rPad)}";
+    }
+
     public void SlowPrint(string text, int printSpeed = 25) {
         for (int i = 0; i < text.Count(); i ++) {
             Console.Write(text[i]);
@@ -39,6 +44,9 @@ class CHString {
     public string Red() { return "\u001b[91m"; }
     public string Red(string text) {
         return $"\u001b[91m{text}\u001b[0m";
+    }
+    public string DarkGrey(string text) {
+        return $"\u001b[90m{text}\u001b[0m";
     }
     public string Green() { return "\u001B[32m"; }
     public string Yellow() { return "\u001B[93m"; }

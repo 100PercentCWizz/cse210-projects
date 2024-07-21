@@ -1,3 +1,5 @@
+using System.Runtime;
+
 abstract class Enemy {
 
     // MEMBER VARIABLES / ATTRIBUTES
@@ -5,6 +7,7 @@ abstract class Enemy {
     protected string _name;
     protected int _hp;
     protected int _maxHp;
+    protected List<Item> _droppableItems;
 
     // MEMBER METHODS / FUNCTIONS / BEHAVIORS
 
@@ -16,9 +19,15 @@ abstract class Enemy {
 
         // OTHER METHODS
 
+    public abstract List<Boolean> DoStatusAffect(List<Boolean> playerCurrentStatuses);
+
     public int GetHealthFactor() {
         if (_hp > 0) {
-            return _hp / (_maxHp / 50);
+            int factor = Convert.ToInt32((double)_hp / ((double)_maxHp / 50.0));
+            if (factor > 50) {
+                factor = 50;
+            }
+            return factor;
         }
         else {
             return 0;
@@ -41,5 +50,7 @@ abstract class Enemy {
     public abstract int Attack();
 
     public void ReceivesDamage(int damage) { _hp -= damage; }
+
+    public abstract Item DropItem();
 
 }

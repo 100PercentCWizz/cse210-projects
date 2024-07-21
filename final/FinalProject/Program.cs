@@ -28,6 +28,17 @@ class Program
             Thread.Sleep(1000);
 
             combat.EngageInBattle();
+            if (player.IsAlive()) {
+                finalScore ++;
+
+                Console.Clear();
+                chstring.SlowPrint($"\n{player.GetName()} picked up a {combat.GetDroppedItem()}!");
+                if (player.BagIsFull()) {
+                    chstring.SlowPrint($"\nBecause {player.GetName()}'S bag was full, they dropped the {player.GetFirstItemName()}!");
+                    player.DropItem();
+                }
+                Thread.Sleep(1000);
+            }
         }
 
         Console.Clear();
@@ -35,3 +46,4 @@ class Program
         
     }
 }
+

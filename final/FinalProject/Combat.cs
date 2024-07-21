@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 class Combat {
 
     // MEMBER VARIABLES / ATTRIBUTES
@@ -30,7 +32,7 @@ class Combat {
                 _enemy = new HeavyBoss(scoreP);
             }
             else if (typeSelection == 1) {
-                _enemy = new HeavyBoss(scoreP);
+                _enemy = new HealerBoss(scoreP);
             }
             else {
                 _enemy = new HeavyBoss(scoreP);
@@ -38,13 +40,13 @@ class Combat {
         }
         else {
             if (typeSelection == 0) {
-                _enemy = new HeavyBoss(scoreP);
+                _enemy = new FireEnemy(scoreP);
             }
             else if (typeSelection == 1) {
-                _enemy = new HeavyBoss(scoreP);
+                _enemy = new IceEnemy(scoreP);
             }
             else {
-                _enemy = new HeavyBoss(scoreP);
+                _enemy = new FireEnemy(scoreP);
             }
         }
     }
@@ -133,7 +135,18 @@ class Combat {
         UpdateHealthBars();
         while (BattleIsActive()) {
             PlayerDoesTurn();
-            EnemyDoesTurn();
+            if (_enemy.IsAlive()) {
+                EnemyDoesTurn();
+            }
+            if (_player.IsBurned()) {
+                UpdateBattleMessage($"{_player.GetName()} is burned!");
+                Thread.Sleep(750);
+                _player.GetsBurned();
+            }
+            if (_player.IsFrozen()) {
+                UpdateBattleMessage($"{_player.GetName()}'S defense is lower because of frostbite!");
+                Thread.Sleep(750);
+            }
         }
     }
     // ^^^
@@ -146,13 +159,13 @@ class Combat {
         Console.CursorLeft = 0;
         Console.Write("[]  []                                                  []  []");
         Console.CursorLeft = 6;
-        chstring.SlowPrint(GetEnemyHealthString());
+        chstring.SlowPrint(GetEnemyHealthString(), printSpeed: 20);
 
         Console.CursorTop = 16;
         Console.CursorLeft = 0;
         Console.Write("[]  []                                                  []  []");
         Console.CursorLeft = 6;
-        chstring.SlowPrint(GetPlayerHealthString());
+        chstring.SlowPrint(GetPlayerHealthString(), printSpeed: 20);
     }
 
     private void UpdateBattleMessage(string messageP) {
@@ -167,17 +180,122 @@ class Combat {
     private void EnemyDoesTurn() {
         UpdateBattleMessage($"The {_enemy.GetName()} attacks!");
         _player.ReceivesDamage(_enemy.Attack());
+        _player.SetStatuses(_enemy.DoStatusAffect(_player.GetStatuses()));
         UpdateHealthBars();
     }
 
     private void PlayerDoesTurn() {
-        UpdateBattleMessage($"What will {_player.GetName()} do? ");
-        Console.ReadLine();
 
-        UpdateBattleMessage($"{_player.GetName()} attacks!");
+        string user = "HOME";
+ 
+        Boolean decisionIsNotMade = true;
+        while (decisionIsNotMade) {
+            if (user == "HOME") {
+                user = GetUserChoice([["1", "ATTACK"], ["2", "USE AN ITEM"]], ["", "  1. ATTACK", "", "", "  2. USE AN ITEM", ""]);
+            }
+            else if (user == "USE AN ITEM") {
+                user = GetUserChoice(_player.GetItemValidReturnList(), _player.GetItemChoiceBoxList());
+            }
+            else {
+                decisionIsNotMade = false;
+            }
+        }
 
-        _enemy.ReceivesDamage(_player.DealsDamage());
+        if (user == "ATTACK") {
+            UpdateBattleMessage($"{_player.GetName()} attacks!");
+            _enemy.ReceivesDamage(_player.DealsDamage());
+        }
+        else {
+            int itemIndex = Int32.Parse(user) - 1;
+            List<Item> playersItems = _player.GetItems();
+            if (playersItems[itemIndex] is HealthPotion) {
+                UpdateBattleMessage($"{_player.GetName()} uses a HEALTH POTION!");
+                _player.ReceivesDamage(playersItems[itemIndex].ReturnValue());
+                _player.RemoveItemAt(itemIndex);
+            }
+            else if (playersItems[itemIndex] is BurnCure) {
+                UpdateBattleMessage($"{_player.GetName()} uses a BURN CURE!");
+                _player.SetBurnStatus(false);
+                _player.RemoveItemAt(itemIndex);
+                UpdateBattleMessage($"{_player.GetName()} is no longer burning!");
+            }
+            else if (playersItems[itemIndex] is FrostbiteCure) {
+                UpdateBattleMessage($"{_player.GetName()} uses a FROSTBITE CURE!");
+                _player.SetFrostStatus(false);
+                _player.RemoveItemAt(itemIndex);
+                UpdateBattleMessage($"{_player.GetName()} is no longer frostbitten!");
+            }
+            // _player.
+            // FIX THIS!!!
+        }
+
         UpdateHealthBars();
+    }
+
+    private void CursorLT(int leftP, int topP) {
+        Console.CursorLeft = leftP;
+        Console.CursorTop = topP;
+    }
+
+    public void UpdateChoiceBox(List<string> stringList) {
+        CHString chstring = new CHString();
+        CursorLT(6, 18);
+        Console.Write(chstring.LeftAligned(stringList[0], 24));
+        CursorLT(6, 19);
+        Console.Write(chstring.LeftAligned(stringList[1], 24));
+        CursorLT(6, 20);
+        Console.Write(chstring.LeftAligned(stringList[2], 24));
+        CursorLT(32, 18);
+        Console.Write(chstring.LeftAligned(stringList[3], 24));
+        CursorLT(32, 19);
+        Console.Write(chstring.LeftAligned(stringList[4], 24));
+        CursorLT(32, 20);
+        Console.Write(chstring.LeftAligned(stringList[5], 24));
+    }
+
+    public string GetUserChoice(List<List<string>> validReturnList, List<string> choiceBoxList) {
+        
+        Boolean IsNotValidAnswer(string param) {
+
+            Boolean outBool = true;
+
+            foreach (List<string> pair in validReturnList) {
+                if (param == pair[0]) {
+                    outBool = false;
+                }
+            }
+
+            return outBool;
+
+        }
+
+        string outVal;
+
+        UpdateChoiceBox(choiceBoxList);
+
+        UpdateBattleMessage($"What will {_player.GetName()} do? ");
+        outVal = Console.ReadLine();
+
+        while (IsNotValidAnswer(outVal)) {
+            UpdateBattleMessage($"What will {_player.GetName()} do? ");
+            outVal = Console.ReadLine();
+        }
+
+        foreach (List<string> pair in validReturnList) {
+            if (outVal == pair[0]) {
+                outVal = pair[1];
+                break;
+            }
+        }
+
+        return outVal;
+
+    }
+
+    public string GetDroppedItem() {
+        Item droppedItem = _enemy.DropItem();
+        _player.GetItem(droppedItem);
+        return droppedItem.GetName();
     }
 
 }

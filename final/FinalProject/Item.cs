@@ -1,18 +1,32 @@
-class Item {
+// Item.cs
 
-    // MEMBER VARIABLES / ATTRIBUTES
+using System;
 
-    // MEMBER METHODS / FUNCTIONS / BEHAVIORS
+public abstract class Item {
+    // private string _name { get; private set; }
+    // private string _description { get; private set; }
+    // public int _value { get; private set; }
+    protected string _name;
+    protected string _description;
 
-        // CONSTRUCTORS ( METHODS )
+    // public Item(string name, string description, int value) {
+    //     Name = name;
+    //     Description = description;
+    //     Value = value;
+    // }
 
-    public Item() {
+    public Item(string name) {
+        _name = name;
     }
 
-        // GETTERS / ACCESSORS ( METHODS )
+    // public abstract void Use();
 
-        // SETTERS / MUTATORS ( METHODS )
+    public abstract Boolean IsUsableInBattle();
 
-        // OTHER METHODS
+    public string GetName() {
+        return _name.ToUpper();
+    }
+
+    public abstract int ReturnValue();
 
 }
